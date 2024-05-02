@@ -1,9 +1,13 @@
 
 
-//<text>
+<text>
 Hello, this is Literate Programming  
-this should be a new Line
-//</text>
+this should be a new Line  
+~~Scratch this.~~  
+$ \sqrt{3x-1}+(1+x)^2 $
+
+
+</text>
 
 public class HelloWorld {
 public static void main(String[] args) {
@@ -11,9 +15,25 @@ UseLabel: test
 }
 }
 
-//<text>
-I should be able to type here
-//</text>
+
 Label: test
  System.out.println("Hello, World!");
+ int x = 5;
+ int i = 10;
+UseLabel: secondlabel
+
 EndLabel: test
+
+
+
+
+
+
+
+
+<text>
+was cooles, muh muuuhh
+</text>
+Label: secondlabel
+System.out.println(x+i);
+EndLabel: secondlabel

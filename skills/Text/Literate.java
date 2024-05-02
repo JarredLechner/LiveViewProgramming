@@ -83,6 +83,10 @@ public class Literate {
             if(skip){
                 continue;
             }
+            if(Syntax.isLabelDeclaration(line)){
+                macro.append(replaceLabel(Syntax.useLabel(line),path));
+                continue;
+            }
             macro.append(line+ "  \n");
 
         }
@@ -109,20 +113,29 @@ public class Literate {
             }
             if(Syntax.isTextEnd(line)){
                 inText = false;
+                continue;
             }
             if(line.trim().isEmpty()){
                 finalText.append("  \n");
                 continue;
             }
             if(Syntax.isLabel(line) && !Syntax.isLabelDeclaration(line)){
-                inCode = true;
+                if(inCode){
+                    finalText.append("```  \n");
+                }
                 finalText.append("## "+ line+ "  \n");
                 finalText.append("```  \n");
+                inCode = true;
+            
+                
+                
+                
                 continue;
             }
             if(Syntax.isEndLabel(line)){
                 finalText.append("```  \n");
                 inCode = false;
+                continue;
             }
             if(!inCode &&! inText ){
                 finalText.append("```  \n");
@@ -152,11 +165,11 @@ class Syntax{
         return line.trim().startsWith("UseLabel:");
     }
     static boolean isText(String line){
-      return line.contains("//<text>");
+      return line.trim().startsWith("<text>");
     }
 
     static boolean isTextEnd(String line){
-      return line.contains("//</text>");
+      return line.trim().startsWith("</text>");
     }
     static boolean isExample(String line){
       return line.contains("//<example>");
