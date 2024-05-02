@@ -1,0 +1,19 @@
+
+
+//<text>
+Hello, this is Literate Programming  
+this should be a new Line
+//</text>
+
+public class HelloWorld {
+public static void main(String[] args) {
+UseLabel: test
+}
+}
+
+//<text>
+I should be able to type here
+//</text>
+Label: test
+ System.out.println("Hello, World!");
+EndLabel: test

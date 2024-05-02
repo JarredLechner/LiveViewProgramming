@@ -97,31 +97,39 @@ public class Literate {
             System.err.println("Error reading file");
             System.exit(1);
         }
-       
-        boolean skip = false;
         boolean inCode = false;
+        boolean inText = true;
         StringBuilder finalText = new StringBuilder();
         
         for(String line : text) {
-            System.out.println(line);
-            if(skip){
-                continue;
-            }
             if(Syntax.isText(line)){
+                inText = true;
+                inCode = false;
                 continue;
             }
             if(Syntax.isTextEnd(line)){
+                inText = false;
+            }
+            if(line.trim().isEmpty()){
+                finalText.append("  \n");
                 continue;
             }
             if(Syntax.isLabel(line) && !Syntax.isLabelDeclaration(line)){
-                finalText.append("# ").append(line+ "  \n");
-                
-               finalText.append("```  \n ");
+                inCode = true;
+                finalText.append("## "+ line+ "  \n");
+                finalText.append("```  \n");
                 continue;
             }
-            finalText.append(line).append("   \n ");
-
-        }
+            if(Syntax.isEndLabel(line)){
+                finalText.append("```  \n");
+                inCode = false;
+            }
+            if(!inCode &&! inText ){
+                finalText.append("```  \n");
+                inCode = true;
+            }
+            finalText.append(line).append("  \n");
+       }
         return finalText.toString();
     }
         
@@ -135,13 +143,13 @@ public class Literate {
 
 class Syntax{
     static boolean isLabel(String line) {
-        return line.startsWith("Label:");
+        return line.trim().startsWith("Label:");
     }
     static boolean isEndLabel(String line) {
-        return line.startsWith("EndLabel:");
+        return line.trim().startsWith("EndLabel:");
     }
     static boolean isLabelDeclaration(String line) {
-        return line.startsWith("UseLabel:");
+        return line.trim().startsWith("UseLabel:");
     }
     static boolean isText(String line){
       return line.contains("//<text>");
